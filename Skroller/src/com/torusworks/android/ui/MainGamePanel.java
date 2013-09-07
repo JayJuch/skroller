@@ -168,8 +168,8 @@ public class MainGamePanel extends SurfaceView implements
 		Paint paint = new Paint(); 
 		
 		int height = getHeight();
-		paint.setColor(Color.WHITE);
-		paint.setAlpha((int)(255 * (rms/100)));
+		paint.setColor(Color.MAGENTA);
+		paint.setAlpha(200);
 		paint.setTextSize(height);
 		String text = "Some text";
 		Rect bounds = new Rect();
@@ -177,12 +177,30 @@ public class MainGamePanel extends SurfaceView implements
 		text = text + text;
 
 		idx = idx + (int)(height * speed);
+
+		int maxVerts = (int)Math.pow((int)(rms/10),2);
+		for (int i = 0; i < maxVerts ; i++){
+			int xOff = 0;
+			int yOff = 0;
+			
+			double t = 2 * Math.PI * ((double)i/maxVerts);
+			xOff = (int)(rms * Math.cos(t));
+			yOff = (int)(rms * Math.sin(t));
+			canvas.drawText(text, -1*idx + xOff, height - (height - bounds.height())/2 + yOff, paint);
+			
+			
+		}
+		
+		paint.setColor(Color.WHITE);
+		paint.setAlpha(150);
 		canvas.drawText(text, -1*idx, height - (height - bounds.height())/2, paint);
+		
+		
 		if (idx > bounds.width()) idx = 0;
 		
-		droid.draw(canvas);
+//		droid.draw(canvas);
 		// display fps
-		displayFps(canvas, avgFps);
+//		displayFps(canvas, avgFps);
 	}
 
 	/*
