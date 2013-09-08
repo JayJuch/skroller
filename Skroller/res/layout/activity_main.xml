@@ -8,9 +8,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="25dp"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/editMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            android:hint="Message to Skroll">
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/buttonSkroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Skroll!" 
+            android:onClick="onClick"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

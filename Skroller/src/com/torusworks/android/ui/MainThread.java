@@ -73,7 +73,7 @@ public class MainThread extends Thread {
 
 	@Override
 	public void run() {
-		Canvas canvas;
+		Canvas canvas = null;
 		Log.d(TAG, "Starting game loop");
 		// initialise timing elements for stat gathering
 		initTimingElements();
@@ -86,7 +86,6 @@ public class MainThread extends Thread {
 		sleepTime = 0;
 		
 		while (running) {
-			canvas = null;
 			// try locking the canvas for exclusive pixel editing
 			// in the surface
 			try {

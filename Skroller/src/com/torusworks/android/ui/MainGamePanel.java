@@ -29,37 +29,30 @@ public class MainGamePanel extends SurfaceView implements
 
 	private MainThread thread;
 	private Droid droid;
+	
+	private Skroller skroller;
 
 	// the fps to be displayed
 	private String avgFps;
 	
-	private int idx = 0;
-	private float speed = .025f;
-	
-	private Visualizer mVisualizer;
-	private int[] formattedVizData;
-	private byte[] vizBuffer;
-	
+
 	
 	public void setAvgFps(String avgFps) {
 		this.avgFps = avgFps;
 	}
 
-	public MainGamePanel(Context context) {
+	public MainGamePanel(Context context, SkrollContent content) {
 		super(context);
+				
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
 
 		// create droid and load bitmap
-		droid = new Droid(BitmapFactory.decodeResource(getResources(),
-				com.torusworks.skroller.R.drawable.ic_launcher), 50, 50);
+//		droid = new Droid(BitmapFactory.decodeResource(getResources(),
+//				com.torusworks.skroller.R.drawable.ic_launcher), 50, 50);
+
+		skroller = new Skroller(content, this);
 		
-		mVisualizer = new Visualizer(0);
-		int captureSize = Visualizer.getCaptureSizeRange()[1];
-	    mVisualizer.setCaptureSize(captureSize);
-	    mVisualizer.setEnabled(true);
-	    formattedVizData = new int[captureSize];
-	    vizBuffer = new byte[captureSize];
 		
 
 		// create the game loop thread
@@ -87,6 +80,7 @@ public class MainGamePanel extends SurfaceView implements
 		Log.d(TAG, "Surface is being destroyed");
 		// tell the thread to shut down and wait for it to finish
 		// this is a clean shutdown
+		thread.setRunning(false);
 		boolean retry = true;
 		while (retry) {
 			try {
@@ -96,6 +90,7 @@ public class MainGamePanel extends SurfaceView implements
 				// try again shutting down the thread
 			}
 		}
+		skroller.release();
 		Log.d(TAG, "Thread was shut down cleanly");
 	}
 
@@ -103,41 +98,28 @@ public class MainGamePanel extends SurfaceView implements
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			// delegating event handling to the droid
-			droid.handleActionDown((int) event.getX(), (int) event.getY());
+			skroller.handleActionDown((int) event.getX(), (int) event.getY());
 
-			// check if in the lower part of the screen we exit
-			if (event.getY() > getHeight() - 50) {
-				thread.setRunning(false);
-				((Activity) getContext()).finish();
-			} else {
-				Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
-			}
+//			// check if in the lower part of the screen we exit
+//			if (event.getY() > getHeight() - 50) {
+//				thread.setRunning(false);
+//				((Activity) getContext()).finish();
+//			} else {
+//				Log.d(TAG, "Coords: x=" + event.getX() + ",y=" + event.getY());
+//			}
 		}
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
-			// the gestures
-			if (droid.isTouched()) {
-				// the droid was picked up and is being dragged
-				droid.setX((int) event.getX());
-				droid.setY((int) event.getY());
-			}
+			skroller.move((int) event.getX(), (int) event.getY());
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			// touch was released
-			if (droid.isTouched()) {
-				droid.setTouched(false);
+			if (skroller.isTouched()) {
+				skroller.setTouched(false, 0);
 			}
 		}
 		return true;
 	}
 
-	public int[] getFormattedData(byte[] rawVizData) {
-	    for (int i = 0; i < formattedVizData.length; i++) {
-	        // convert from unsigned 8 bit to signed 16 bit
-	        int tmp = ((int) rawVizData[i] & 0xFF) - 128;
-	        formattedVizData[i] = tmp;
-	    }
-	    return formattedVizData;
-	}
 	
 	/*
 	 * (non-Javadoc)
@@ -147,60 +129,12 @@ public class MainGamePanel extends SurfaceView implements
 	@Override
 	public void render(Canvas canvas) {
 		
-		// capture sound
-		mVisualizer.getWaveForm(vizBuffer);
-		
-		double rms = 0;
-		getFormattedData(vizBuffer);
-		if (formattedVizData.length > 0) {
-		        for (int i = 0; i < formattedVizData.length; i++) {
-		            int val = formattedVizData[i];
-		            rms += val * val;
-		        }
-		        rms = Math.sqrt(rms / formattedVizData.length);
-		}		
-		Log.d("dsa",Double.toString(rms));
-		// draw stuff
+		skroller.draw(canvas);
 		
 		
-		canvas.drawColor(Color.BLACK);
-		
-		Paint paint = new Paint(); 
-		
-		int height = getHeight();
-		paint.setColor(Color.MAGENTA);
-		paint.setAlpha(200);
-		paint.setTextSize(height);
-		String text = "Some text";
-		Rect bounds = new Rect();
-		paint.getTextBounds(text, 0, text.length(), bounds);
-		text = text + text;
-
-		idx = idx + (int)(height * speed);
-
-		int maxVerts = (int)Math.pow((int)(rms/10),2);
-		for (int i = 0; i < maxVerts ; i++){
-			int xOff = 0;
-			int yOff = 0;
-			
-			double t = 2 * Math.PI * ((double)i/maxVerts);
-			xOff = (int)(rms * Math.cos(t));
-			yOff = (int)(rms * Math.sin(t));
-			canvas.drawText(text, -1*idx + xOff, height - (height - bounds.height())/2 + yOff, paint);
-			
-			
-		}
-		
-		paint.setColor(Color.WHITE);
-		paint.setAlpha(150);
-		canvas.drawText(text, -1*idx, height - (height - bounds.height())/2, paint);
-		
-		
-		if (idx > bounds.width()) idx = 0;
-		
-//		droid.draw(canvas);
+		//droid.draw(canvas);
 		// display fps
-//		displayFps(canvas, avgFps);
+		displayFps(canvas, avgFps);
 	}
 
 	/*
@@ -210,28 +144,28 @@ public class MainGamePanel extends SurfaceView implements
 	 */
 	@Override
 	public void update() {
-		// check collision with right wall if heading right
-		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
-				&& droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
-			droid.getSpeed().toggleXDirection();
-		}
-		// check collision with left wall if heading left
-		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
-				&& droid.getX() - droid.getBitmap().getWidth() / 2 <= 0) {
-			droid.getSpeed().toggleXDirection();
-		}
-		// check collision with bottom wall if heading down
-		if (droid.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
-				&& droid.getY() + droid.getBitmap().getHeight() / 2 >= getHeight()) {
-			droid.getSpeed().toggleYDirection();
-		}
-		// check collision with top wall if heading up
-		if (droid.getSpeed().getyDirection() == Speed.DIRECTION_UP
-				&& droid.getY() - droid.getBitmap().getHeight() / 2 <= 0) {
-			droid.getSpeed().toggleYDirection();
-		}
-		// Update the lone droid
-		droid.update();
+//		// check collision with right wall if heading right
+//		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
+//				&& droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
+//			droid.getSpeed().toggleXDirection();
+//		}
+//		// check collision with left wall if heading left
+//		if (droid.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
+//				&& droid.getX() - droid.getBitmap().getWidth() / 2 <= 0) {
+//			droid.getSpeed().toggleXDirection();
+//		}
+//		// check collision with bottom wall if heading down
+//		if (droid.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
+//				&& droid.getY() + droid.getBitmap().getHeight() / 2 >= getHeight()) {
+//			droid.getSpeed().toggleYDirection();
+//		}
+//		// check collision with top wall if heading up
+//		if (droid.getSpeed().getyDirection() == Speed.DIRECTION_UP
+//				&& droid.getY() - droid.getBitmap().getHeight() / 2 <= 0) {
+//			droid.getSpeed().toggleYDirection();
+//		}
+//		// Update the lone droid
+//		droid.update();
 	}
 
 	private void displayFps(Canvas canvas, String fps) {
