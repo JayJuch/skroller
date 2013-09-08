@@ -1,5 +1,7 @@
 package com.torusworks.android.ui;
 
+import com.torusworks.skroller.MainActivity;
+import com.torusworks.skroller.R;
 import com.torusworks.skroller.model.SkrollContent;
 
 import android.app.Activity;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 public class DroidzActivity extends Activity {
     /** Called when the activity is first created. */
@@ -48,6 +51,28 @@ public class DroidzActivity extends Activity {
 //            return;
 //        }
         
+
+    }
+
+	@Override
+	protected void onDestroy() {
+		Log.d(TAG, "Destroying...");
+		super.onDestroy();
+		
+	}
+
+	@Override
+	protected void onStop() {
+		Log.d(TAG, "Stopping...");
+		
+		super.onStop();
+	}
+    
+	@Override
+    protected void onStart(){
+		Log.d(TAG, "Starting...");
+    	super.onStart();
+    	
         // Get intent, action and MIME type
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -61,6 +86,11 @@ public class DroidzActivity extends Activity {
                 if ("text/plain".equals(type)) {
                     sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
                 } 
+            } else {
+            	// we dont have content to start this activity
+            	// go to main activity
+    	    	Intent i = new Intent(getBaseContext(), MainActivity.class); 
+    	    	startActivity(i);
             }
             
             
@@ -71,26 +101,7 @@ public class DroidzActivity extends Activity {
         }
         
         setContentView(new MainGamePanel(this, content));
-        Log.d(TAG, "View added");
-    }
-
-	@Override
-	protected void onDestroy() {
-		Log.d(TAG, "Destroying...");
-		super.onDestroy();
-		
-	}
-
-	@Override
-	protected void onStop() {
-		Log.d(TAG, "Stopping...");
-		super.onStop();
-	}
-    
-	@Override
-    protected void onStart(){
-		Log.d(TAG, "Starting...");
-    	super.onStart();
+        Log.d(TAG, "View added");    	
     }
 	@Override
     protected void onRestart(){

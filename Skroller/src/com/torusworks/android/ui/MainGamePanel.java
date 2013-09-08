@@ -35,8 +35,6 @@ public class MainGamePanel extends SurfaceView implements
 	// the fps to be displayed
 	private String avgFps;
 	
-
-	
 	public void setAvgFps(String avgFps) {
 		this.avgFps = avgFps;
 	}
@@ -71,6 +69,10 @@ public class MainGamePanel extends SurfaceView implements
 	public void surfaceCreated(SurfaceHolder holder) {
 		// at this point the surface is created and
 		// we can safely start the game loop
+		if (thread !=null && thread.getState() == Thread.State.TERMINATED) {
+			thread = new MainThread(getHolder(), this);
+		}
+
 		thread.setRunning(true);
 		thread.start();
 	}
@@ -94,6 +96,7 @@ public class MainGamePanel extends SurfaceView implements
 		Log.d(TAG, "Thread was shut down cleanly");
 	}
 
+	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
