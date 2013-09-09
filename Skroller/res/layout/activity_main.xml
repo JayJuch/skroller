@@ -11,15 +11,17 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" 
-        android:scrollbarSize="3dp">
+        android:scrollbarStyle="outsideOverlay"
+        android:layout_gravity="center"
+        >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="25dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
             android:orientation="vertical" >
 
             <EditText

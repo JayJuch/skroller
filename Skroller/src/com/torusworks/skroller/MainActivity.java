@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
 	    	}
 	    	SkrollContent content = new SkrollContent(message);
 	    	
-	    	content.setFrontTextColor(colorRed<<16 | colorGreen<<8 | colorBlue);
+	    	content.setBackTextColor(colorRed<<16 | colorGreen<<8 | colorBlue);
 	    	i.putExtra("SkrollContent", content);
 	    	startActivity(i);
 	    	

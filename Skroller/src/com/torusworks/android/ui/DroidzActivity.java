@@ -90,12 +90,11 @@ public class DroidzActivity extends Activity {
                     sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
                 } 
             } else {
-            	// we dont have content to start this activity
+            	// we don't have content to start this activity
             	// go to main activity
     	    	Intent i = new Intent(getBaseContext(), MainActivity.class); 
     	    	startActivity(i);
             }
-            
             
             sharedText = sharedText.replaceAll("[^\\p{Print}]", " ");
             sharedText = sharedText.replaceAll("\\p{Cntrl}", " ");
