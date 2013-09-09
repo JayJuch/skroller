@@ -8,82 +8,88 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="25dp"
-        android:orientation="vertical" >
-
-        <EditText
-            android:id="@+id/editMessage"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Message to Skroll"
-            android:lines="6" >
-
-            <requestFocus />
-        </EditText>
+        android:layout_margin="10dp" 
+        android:scrollbarSize="3dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" 
-            android:layout_margin="5dp">
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="25dp"
+            android:orientation="vertical" >
 
-            <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-
-                <SeekBar
-                    android:id="@+id/seekBarRed"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:max="255"
-                    android:progress="128" 
-                    />
-
-                <SeekBar
-                    android:id="@+id/seekBarGreen"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:max="255"
-                    android:progress="128" />
-
-                <SeekBar
-                    android:id="@+id/seekBarBlue"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:max="255"
-                    android:progress="128" />
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/editMessage"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical" 
-                android:layout_margin="10dp"
-                android:background="#000000">
+                android:layout_height="wrap_content"
+                android:hint="Message to Skroll"
+                android:lines="6" >
 
-                <TextView
-                    android:id="@+id/textViewShowColor"
+                <requestFocus />
+            </EditText>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <SeekBar
+                        android:id="@+id/seekBarRed"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progress="57" 
+                        />
+
+                    <SeekBar
+                        android:id="@+id/seekBarGreen"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progress="255" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarBlue"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progress="20" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_margin="10dp"
-                    android:background="#FFFF00"
-                    android:text="" />
+                    android:background="#000000"
+                    android:orientation="vertical" >
 
+                    <TextView
+                        android:id="@+id/textViewShowColor"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_margin="10dp"
+                        android:background="#39FF14"
+                        android:text="" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonSkroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="Skroll!" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/buttonSkroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="Skroll!" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

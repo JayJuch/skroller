@@ -10,7 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -101,8 +104,28 @@ public class DroidzActivity extends Activity {
         }
         
         setContentView(new MainGamePanel(this, content));
+        
+		//toggleMusicPlayPause();
+        
         Log.d(TAG, "View added");    	
     }
+
+	private void toggleMusicPlayPause() {
+		// toggle music
+		long eventtime = SystemClock.uptimeMillis();
+		Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+		KeyEvent downEvent = new KeyEvent(eventtime, eventtime,
+				KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, 0);
+		downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
+		sendOrderedBroadcast(downIntent, null);
+
+		Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+		KeyEvent upEvent = new KeyEvent(eventtime, eventtime,
+				KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, 0);
+		upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
+		sendOrderedBroadcast(upIntent, null);
+	}
+	
 	@Override
     protected void onRestart(){
 		Log.d(TAG, "Restarting...");

@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	private int colorRed = 128;
-	private int colorGreen = 128;
-	private int colorBlue = 128;
+	private int colorRed = 57;
+	private int colorGreen = 255;
+	private int colorBlue = 20;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +126,11 @@ public class MainActivity extends Activity {
 	        // run activity
 	    	Intent i = new Intent(getBaseContext(), DroidzActivity.class); 
 	    	EditText editMessage = (EditText)findViewById(R.id.editMessage);
-	    	SkrollContent content = new SkrollContent(editMessage.getText().toString());
+	    	String message = editMessage.getText().toString();
+	    	if (message == null || message.isEmpty()) {
+	    		message = "No slogan? No name? ";
+	    	}
+	    	SkrollContent content = new SkrollContent(message);
 	    	
 	    	content.setFrontTextColor(colorRed<<16 | colorGreen<<8 | colorBlue);
 	    	i.putExtra("SkrollContent", content);
