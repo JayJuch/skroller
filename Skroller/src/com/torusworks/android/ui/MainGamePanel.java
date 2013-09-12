@@ -38,7 +38,7 @@ public class MainGamePanel extends SurfaceView implements
 		this.avgFps = avgFps;
 	}
 
-	public MainGamePanel(Context context, SkrollContent content) {
+	public MainGamePanel(Context context, SkrollContent content, TorusVisualizer visualizer) {
 		super(context);
 
 		// adding the callback (this) to the surface holder to intercept events
@@ -48,7 +48,7 @@ public class MainGamePanel extends SurfaceView implements
 		// droid = new Droid(BitmapFactory.decodeResource(getResources(),
 		// com.torusworks.skroller.R.drawable.ic_launcher), 50, 50);
 
-		skroller = new Skroller(content, this);
+		skroller = new Skroller(content, this, visualizer);
 
 		// create the game loop thread
 		thread = new MainThread(getHolder(), this);

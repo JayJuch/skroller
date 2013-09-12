@@ -3,6 +3,7 @@ package com.torusworks.skroller;
 import com.torusworks.android.ui.MainGamePanel;
 import com.torusworks.skroller.R;
 import com.torusworks.skroller.model.SkrollContent;
+import com.torusworks.skroller.model.TorusVisualizer;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -22,6 +23,8 @@ public class SkrollerActivity extends Activity {
 	/** Called when the activity is first created. */
 
 	private static final String TAG = SkrollerActivity.class.getSimpleName();
+	
+	private TorusVisualizer mVisualizer;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,9 @@ public class SkrollerActivity extends Activity {
 		// requesting to turn the title OFF
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// making it full screen
+		
+		this.mVisualizer = new TorusVisualizer();
+		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
@@ -37,6 +43,7 @@ public class SkrollerActivity extends Activity {
 	protected void onDestroy() {
 		Log.d(TAG, "Destroying...");
 		super.onDestroy();
+		this.mVisualizer.release();
 
 	}
 
@@ -78,7 +85,7 @@ public class SkrollerActivity extends Activity {
 			content = new SkrollContent(sharedText);
 		}
 
-		setContentView(new MainGamePanel(this, content));
+		setContentView(new MainGamePanel(this, content, mVisualizer));
 
 		// toggleMusicPlayPause();
 
