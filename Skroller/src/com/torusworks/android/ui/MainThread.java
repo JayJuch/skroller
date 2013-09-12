@@ -90,6 +90,10 @@ public class MainThread extends Thread {
 				// render state to the screen
 				// draws the canvas on the panel
 				canvas = this.surfaceHolder.lockCanvas();
+				if (canvas == null) {
+					Log.d(TAG, "Canvas is null, exitinging thread");
+					break;
+				}
 				synchronized (surfaceHolder) {
 					this.gamePanel.render(canvas);
 				}
