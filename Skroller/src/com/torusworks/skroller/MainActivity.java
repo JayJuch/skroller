@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.DragEvent;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnDragListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -24,6 +26,22 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		((EditText)findViewById(R.id.editMessage)).setOnEditorActionListener(
+		        new EditText.OnEditorActionListener() {
+		    @Override
+		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		        if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+		                actionId == EditorInfo.IME_ACTION_DONE ||
+		                event.getAction() == KeyEvent.ACTION_DOWN &&
+		                event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+		        	launchSkrollerActivity();
+		            return true;
+		        }
+		        return false;
+		    }
+		});		
+		
+		
 		final SeekBar skR = (SeekBar) findViewById(R.id.seekBarRed);
 		skR.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -123,21 +141,25 @@ public class MainActivity extends Activity {
 		switch (id) {
 		case R.id.buttonSkroll:
 			// run activity
-			Intent i = new Intent(getBaseContext(), SkrollerActivity.class);
-			EditText editMessage = (EditText) findViewById(R.id.editMessage);
-			String message = editMessage.getText().toString();
-			if (message == null || message.isEmpty()) {
-				message = "No slogan? No name? ";
-			}
-			SkrollContent content = new SkrollContent(message);
-
-			content.setBackTextColor(colorRed << 16 | colorGreen << 8
-					| colorBlue);
-			i.putExtra("SkrollContent", content);
-			startActivity(i);
+			launchSkrollerActivity();
 
 			break;
 		}
+	}
+
+	private void launchSkrollerActivity() {
+		Intent i = new Intent(getBaseContext(), SkrollerActivity.class);
+		EditText editMessage = (EditText) findViewById(R.id.editMessage);
+		String message = editMessage.getText().toString();
+		if (message == null || message.isEmpty()) {
+			message = "No slogan? No name? ";
+		}
+		SkrollContent content = new SkrollContent(message);
+
+		content.setBackTextColor(colorRed << 16 | colorGreen << 8
+				| colorBlue);
+		i.putExtra("SkrollContent", content);
+		startActivity(i);
 	}
 
 }

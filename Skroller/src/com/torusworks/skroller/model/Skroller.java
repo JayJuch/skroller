@@ -96,7 +96,7 @@ public class Skroller {
 		paint.setAlpha(content.getFrontTextAlpha());
 		canvas.drawText(text, -1 * idx, -1 * bounds.top, paint);
 
-		if (idx >= bounds.width()) {
+		if (idx > bounds.width()) {
 			idx = -1 * canvas.getWidth();
 		}
 	}
