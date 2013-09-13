@@ -9,10 +9,15 @@ public class AudioOutVisualizer implements TorusVisualizer {
 	private Visualizer mVisualizer;	
 	private int[] formattedVizData;
 	private byte[] vizBuffer;
+	private static int DEFAULT_CAPTURE_SIZE = 64;
 	
 	public AudioOutVisualizer(){
 		mVisualizer = new Visualizer(0);
-		int captureSize = Visualizer.getCaptureSizeRange()[1];
+		int captureSize = DEFAULT_CAPTURE_SIZE;
+		int minCaptureSize = Visualizer.getCaptureSizeRange()[0];
+		int maxCaptureSize = Visualizer.getCaptureSizeRange()[1];
+		while (captureSize > maxCaptureSize) captureSize >>= 1;
+		while (captureSize < minCaptureSize) captureSize <<= 1;
 		mVisualizer.setCaptureSize(captureSize);
 		mVisualizer.setEnabled(true);
 		formattedVizData = new int[captureSize];
