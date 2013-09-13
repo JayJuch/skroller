@@ -6,13 +6,13 @@ import android.graphics.Color;
 
 public class SkrollContent implements Serializable {
 
-	private double velocity = .030f;
+	private double velocity = .038f;
 	private String message = "";
 	private int frontTextColor = Color.WHITE;
 	private int backTextColor = 0x39FF14;
 	private int frontTextAlpha = 150;
 	private int backTextAlpha = 200;
-	private double backTextRadiusMultiplier = 1.3f;
+	private double backTextRadiusMultiplier = 0.15f;
 		
 	public double getBackTextRadiusMultiplier() {
 		return backTextRadiusMultiplier;

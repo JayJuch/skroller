@@ -1,14 +1,19 @@
 package com.torusworks.skroller.model;
 
+import com.torusworks.android.ui.MainGamePanel;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.audiofx.Visualizer;
+import android.util.Log;
 import android.view.SurfaceView;
 
 public class Skroller {
 
+	private static final String TAG = Skroller.class.getSimpleName();
+	
 	private boolean touched;
 	private SkrollContent content;
 
@@ -47,6 +52,8 @@ public class Skroller {
 
 	public void draw(Canvas canvas) {
 		double rms = mVisualizer.getRms();
+		//Log.d(TAG,Double.toString(rms));
+		double percentRms = rms/128;
 		
 		if (clean_start) {
 			idx -= canvas.getWidth();
@@ -69,16 +76,18 @@ public class Skroller {
 			idx = idx + (int) (height * content.getVelocity());
 		}
 
-		int maxVerts = (int) Math.pow(rms / 10, 2);
+		
+		
+		int maxVerts = (int)(20f * percentRms);
 		for (int i = 0; i < maxVerts; i++) {
 			int xOff = 0;
 			int yOff = 0;
 
 			double t = 2 * Math.PI * ((double) i / maxVerts);
-			xOff = (int) (rms * Math.cos(t) * content
-					.getBackTextRadiusMultiplier());
-			yOff = (int) (rms * Math.sin(t) * content
-					.getBackTextRadiusMultiplier());
+			xOff = (int) (percentRms * Math.cos(t) * content
+					.getBackTextRadiusMultiplier() * height);
+			yOff = (int) (percentRms * Math.sin(t) * content
+					.getBackTextRadiusMultiplier() * height);
 			canvas.drawText(text, -1 * idx + xOff, yOff + -1 * bounds.top,
 					paint);
 		}
