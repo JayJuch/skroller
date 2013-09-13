@@ -4,6 +4,7 @@
 package com.torusworks.android.ui;
 
 import com.torusworks.skroller.model.*;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -83,7 +84,6 @@ public class MainGamePanel extends SurfaceView implements
 		// tell the thread to shut down and wait for it to finish
 		// this is a clean shutdown
 		thread.setRunning(false);
-		skroller.release();
 		boolean retry = true;
 		while (retry) {
 			try {
@@ -93,6 +93,7 @@ public class MainGamePanel extends SurfaceView implements
 				// try again shutting down the thread
 			}
 		}
+		skroller.release();
 		Log.d(TAG, "Thread was shut down cleanly");
 	}
 

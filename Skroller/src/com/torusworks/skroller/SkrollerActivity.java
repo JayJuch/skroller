@@ -1,6 +1,7 @@
 package com.torusworks.skroller;
 
 import com.torusworks.android.ui.MainGamePanel;
+import com.torusworks.android.visualizers.AudioOutVisualizer;
 import com.torusworks.skroller.R;
 import com.torusworks.skroller.model.SkrollContent;
 import com.torusworks.skroller.model.TorusVisualizer;
@@ -14,26 +15,30 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 
-public class SkrollerActivity extends Activity {
+public class SkrollerActivity extends Activity{
 	/** Called when the activity is first created. */
 
 	private static final String TAG = SkrollerActivity.class.getSimpleName();
 	
 	private TorusVisualizer mVisualizer;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+				
 		// requesting to turn the title OFF
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// making it full screen
 		
-		this.mVisualizer = new TorusVisualizer();
+		this.mVisualizer = new AudioOutVisualizer();
 		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -125,4 +130,5 @@ public class SkrollerActivity extends Activity {
 		super.onPause();
 	}
 
+	
 }
