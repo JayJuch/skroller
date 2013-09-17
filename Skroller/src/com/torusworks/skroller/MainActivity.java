@@ -5,12 +5,15 @@ import com.torusworks.skroller.model.SkrollContent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.text.InputType;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -119,6 +122,23 @@ public class MainActivity extends Activity {
 			}
 
 		});
+		
+		final CheckBox checkBoxEnableShoutCast = (CheckBox) findViewById(R.id.checkBoxEnableShoutCast);
+		checkBoxEnableShoutCast.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				final EditText etsc = (EditText) findViewById(R.id.editShoutcast);
+				if (((CheckBox)v).isChecked()) {
+					etsc.setEnabled(true);
+					etsc.setInputType(InputType.TYPE_CLASS_TEXT);
+//					etsc.setFocusable(true);
+				} else {
+					etsc.setEnabled(false);
+					etsc.setInputType(InputType.TYPE_NULL);
+//					etsc.setFocusable(false);
+				}
+			}
+		});	
+		
 
 	}
 
@@ -152,12 +172,21 @@ public class MainActivity extends Activity {
 		EditText editMessage = (EditText) findViewById(R.id.editMessage);
 		String message = editMessage.getText().toString();
 		if (message == null || message.isEmpty()) {
-			message = "No slogan? No name? ";
+			message = "... ";
 		}
 		SkrollContent content = new SkrollContent(message);
 
 		content.setBackTextColor(colorRed << 16 | colorGreen << 8
 				| colorBlue);
+		
+		CheckBox cb = (CheckBox) findViewById(R.id.checkBoxEnableShoutCast);
+		EditText ebStreamUrl = (EditText) findViewById(R.id.editShoutcast);
+		
+		if (cb.isChecked()) {
+			content.setStreamURL(ebStreamUrl.getText().toString());
+		} else {
+			content.setStreamURL(null);			
+		}
 		i.putExtra("SkrollContent", content);
 		startActivity(i);
 	}

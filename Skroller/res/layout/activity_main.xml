@@ -86,6 +86,32 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <CheckBox
+                    android:id="@+id/checkBoxEnableShoutCast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:checked="false" 
+                    android:onClick="onEnableShoutCastClick"/>
+                
+                <EditText
+                android:id="@+id/editShoutcast"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Shoutcast URL"
+                android:text="http://129.16.159.82:80"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:enabled="false"
+                android:inputType="none"
+                >
+                <requestFocus />
+            </EditText>
+            </LinearLayout>
             
             <Button
                 android:id="@+id/buttonSkroll"

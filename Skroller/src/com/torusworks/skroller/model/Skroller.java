@@ -1,16 +1,49 @@
 package com.torusworks.skroller.model;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.Socket;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.torusworks.android.shoutcast.OnFetchComplete;
+import com.torusworks.android.shoutcast.StreamMetaDataReader;
 import com.torusworks.android.ui.MainGamePanel;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaMetadataRetriever;
 import android.media.audiofx.Visualizer;
+import android.os.Build;
+import android.text.Html;
 import android.util.Log;
 import android.view.SurfaceView;
 
-public class Skroller {
+public class Skroller implements OnFetchComplete {
 
 	private static final String TAG = Skroller.class.getSimpleName();
 	
@@ -28,12 +61,33 @@ public class Skroller {
 	private int touchIdx;
 	private int touchX;
 
+	private StreamMetaDataReader streamMetaDataReader;
+	
+	private String displayMessage ="";
+	
 	public Skroller(SkrollContent content, SurfaceView view, TorusVisualizer visualizer) {
 		this.content = content;
 		
 		this.mVisualizer = visualizer;
 
 		this.view = view;
+		
+		displayMessage = content.getMessage();
+		
+		if(content.getStreamURL() != null) {
+			streamMetaDataReader = new StreamMetaDataReader(content.getStreamURL());
+			
+			// synchronously fetch stream info and use it
+			if (streamMetaDataReader.fetchSevenHtml() != null) {
+				displayMessage = content.getMessage() + "  playing: " + streamMetaDataReader.getArtistAndSong();
+			}
+			
+			streamMetaDataReader.setOnFetchComplete(this);
+
+			// start another in the background
+			this.backgroundPollStreamInfo();
+		}
+		
 	}
 
 	public boolean isTouched() {
@@ -47,6 +101,7 @@ public class Skroller {
 		}
 		this.touched = touched;
 	}
+
 
 
 
@@ -68,7 +123,7 @@ public class Skroller {
 		paint.setColor(content.getBackTextColor());
 		paint.setAlpha(content.getBackTextAlpha());
 		paint.setTextSize(height);
-		String text = content.getMessage();
+		String text = displayMessage;
 		Rect bounds = new Rect();
 		paint.getTextBounds(text, 0, text.length() - 1, bounds);
 
@@ -98,9 +153,21 @@ public class Skroller {
 
 		if (idx > bounds.width()) {
 			idx = -1 * canvas.getWidth();
+			
+			// update the message using any updated stream info
+			this.displayMessage = content.getMessage() + "  playing: " + content.popMessage();
+			
+			// go fetch again
+			this.backgroundPollStreamInfo();
 		}
 	}
 
+	public void backgroundPollStreamInfo() {
+		Thread th = new Thread(this.streamMetaDataReader);
+		th.start();
+	}
+
+	
 	/**
 	 * Method which updates the droid's internal state every tick
 	 */
@@ -134,5 +201,11 @@ public class Skroller {
 			int offset = this.touchX - x;
 			this.idx = this.touchIdx + offset;
 		}
+	}
+
+	@Override
+	public void handleFetchComplete(StreamMetaDataReader reader) {
+		// TODO Auto-generated method stub
+		this.content.pushMessage(reader.getArtistAndSong());
 	}
 }

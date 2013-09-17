@@ -1,6 +1,8 @@
 package com.torusworks.skroller.model;
 
 import java.io.Serializable;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import android.graphics.Color;
 
@@ -13,7 +15,29 @@ public class SkrollContent implements Serializable {
 	private int frontTextAlpha = 150;
 	private int backTextAlpha = 200;
 	private double backTextRadiusMultiplier = 0.15f;
-		
+	private String streamURL = null;
+	private Queue<String> messageQueue = new ConcurrentLinkedQueue<String>();
+	
+	public void pushMessage(String msg) {
+		messageQueue.add(msg);
+	}
+	
+	public String popMessage() {
+		String ret = null;
+		if (messageQueue.size() > 0) {
+			ret = messageQueue.remove();
+		}
+		return ret;
+	}
+	
+	public String getStreamURL() {
+		return streamURL;
+	}
+
+	public void setStreamURL(String streamURL) {
+		this.streamURL = streamURL;
+	}
+
 	public double getBackTextRadiusMultiplier() {
 		return backTextRadiusMultiplier;
 	}
