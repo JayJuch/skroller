@@ -75,16 +75,10 @@ public class Skroller implements OnFetchComplete {
 		displayMessage = content.getMessage();
 		
 		if(content.getStreamURL() != null) {
-			streamMetaDataReader = new StreamMetaDataReader(content.getStreamURL());
-			
-			// synchronously fetch stream info and use it
-			if (streamMetaDataReader.fetchSevenHtml() != null) {
-				displayMessage = content.getMessage() + "  playing: " + streamMetaDataReader.getArtistAndSong();
-			}
-			
+			streamMetaDataReader = new StreamMetaDataReader(content.getStreamURL());			
 			streamMetaDataReader.setOnFetchComplete(this);
 
-			// start another in the background
+			// start the stream meta data fetching in the background
 			this.backgroundPollStreamInfo();
 		}
 		
@@ -155,7 +149,7 @@ public class Skroller implements OnFetchComplete {
 			idx = -1 * canvas.getWidth();
 			
 			// update the message using any updated stream info
-			this.displayMessage = content.getMessage() + "  playing: " + content.popMessage();
+			this.displayMessage = content.getMessage() + "  [" + content.popMessage() + "] ";
 			
 			// go fetch again
 			this.backgroundPollStreamInfo();
