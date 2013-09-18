@@ -103,7 +103,7 @@
                     android:hint="Shoutcast URL"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:text="http://129.16.159.82:80" >
+                    android:text="http://radio1-se.digitalgunfire.com:80" >
                 </AutoCompleteTextView>
             </LinearLayout>
 
