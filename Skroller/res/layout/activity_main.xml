@@ -11,29 +11,28 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:scrollbarStyle="outsideOverlay"
         android:layout_gravity="center"
-        >
+        android:scrollbarStyle="outsideOverlay" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
             android:layout_gravity="center"
+            android:layout_margin="5dp"
             android:orientation="vertical" >
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/editMessage"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="No name? No slogan?"
-                android:singleLine="true"
+                android:hint="Message"
                 android:imeOptions="actionDone"
-                >
+                android:singleLine="true" >
+
                 <requestFocus />
-            </EditText>
+            </AutoCompleteTextView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,8 +50,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:max="255"
-                        android:progress="57" 
-                        />
+                        android:progress="57" />
 
                     <SeekBar
                         android:id="@+id/seekBarGreen"
@@ -94,25 +92,23 @@
                     android:id="@+id/checkBoxEnableShoutCast"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:checked="false" 
-                    android:onClick="onEnableShoutCastClick"/>
-                
-                <EditText
-                android:id="@+id/editShoutcast"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="Shoutcast URL"
-                android:text="http://129.16.159.82:80"
-                android:singleLine="true"
-                android:imeOptions="actionDone"
-                android:enabled="false"
-                android:inputType="none"
-                >
-                <requestFocus />
-            </EditText>
+                    android:checked="false"
+                    android:onClick="onEnableShoutCastClick"
+                    android:text="Shoutcast" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/editShoutcast"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="Shoutcast URL"
+                    android:imeOptions="actionDone"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:text="http://129.16.159.82:80" >
+                </AutoCompleteTextView>
             </LinearLayout>
-            
+
             <Button
                 android:id="@+id/buttonSkroll"
                 android:layout_width="match_parent"
