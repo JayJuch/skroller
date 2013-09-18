@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.text.InputType;
 import android.view.DragEvent;
 import android.view.KeyEvent;
@@ -160,12 +161,8 @@ public class MainActivity extends Activity {
 				final EditText etsc = (EditText) findViewById(R.id.editShoutcast);
 				if (((CheckBox)v).isChecked()) {
 					etsc.setEnabled(true);
-					etsc.setInputType(InputType.TYPE_CLASS_TEXT);
-//					etsc.setFocusable(true);
 				} else {
 					etsc.setEnabled(false);
-					etsc.setInputType(InputType.TYPE_NULL);
-//					etsc.setFocusable(false);
 				}
 			}
 		});	
@@ -179,10 +176,13 @@ public class MainActivity extends Activity {
 		String[] ary = PreferencePersister.getArray(this, key, subKey);
 		if (ary != null && ary.length > 0) {
 	        ArrayAdapter<String> historyAdapter = new ArrayAdapter<String>(this,
-	                android.R.layout.simple_dropdown_item_1line, ary);
+	                android.R.layout.select_dialog_item, ary);
 	        AutoCompleteTextView atv = (AutoCompleteTextView) findViewById(autoCompleteTextViewId);
 	        atv.setThreshold(1);
 	        atv.setAdapter(historyAdapter);
+	        Resources res = getResources(); 
+	        int color = res.getColor(android.R.color.black);
+	        atv.setTextColor(color);
 		}		
 	}
 	

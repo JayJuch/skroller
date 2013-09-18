@@ -100,10 +100,8 @@
                     android:id="@+id/editShoutcast"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:hint="Shoutcast URL"
                     android:imeOptions="actionDone"
-                    android:inputType="none"
                     android:singleLine="true"
                     android:text="http://129.16.159.82:80" >
                 </AutoCompleteTextView>
