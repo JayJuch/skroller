@@ -201,6 +201,9 @@ public class SkrollerActivity extends Activity{
 		Log.d(TAG, "Stopping...");
 
 		super.onStop();
+		if(mp != null && mp.isPlaying()) {
+			mp.stop();
+		}
 
 	}
 
@@ -237,7 +240,9 @@ public class SkrollerActivity extends Activity{
 		setContentView(gp);
 
 		// toggleMusicPlayPause();
-
+		if(mp != null && !mp.isPlaying()) {
+			mp.start();
+		}
 		Log.d(TAG, "View added");
 	}
 
