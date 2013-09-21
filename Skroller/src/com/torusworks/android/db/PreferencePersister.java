@@ -86,15 +86,22 @@ public class PreferencePersister {
 		SharedPreferences app_preferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		String serMessageHistory = app_preferences.getString(key, "");
+		List<String> lRet = new LinkedList<String>();
+		
 		if (serMessageHistory != null && !serMessageHistory.isEmpty()) {
 			try {
 				JSONArray jary = new JSONArray(serMessageHistory);
-				aryMessageHistory = new String[jary.length()];
 				for (int i=0;i<jary.length();i++) {
-					JSONObject jo = jary.getJSONObject(i);
-					aryMessageHistory[i] = jo.getString(subKey);
+					try {
+						JSONObject jo = jary.getJSONObject(i);
+						if (jo.getString(subKey) != null) {
+							lRet.add(jo.getString(subKey));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-				
+				aryMessageHistory = lRet.toArray(new String[lRet.size()]);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -119,19 +126,18 @@ public class PreferencePersister {
 				for (int j = 0; j < jary.length(); j++) {
 					JSONObject jo = jary.getJSONObject(j);
 					if (jo.getString(subKey).equals(value)) {
-						bExists = true;
+						// value already exists, get out
+						return true;
 					}
 				}
 
 			} else {
 				jary = new JSONArray();
 			}
-
-			if (!bExists) {
-				JSONObject ob = new JSONObject();
-				ob.put(subKey, value);
-				jary.put(ob);
-			}
+			
+			JSONObject ob = new JSONObject();
+			ob.put(subKey, value);
+			jary.put(ob);
 
 			String serializedMsgHistory = jary.toString();
 			SharedPreferences.Editor editor = app_preferences.edit();

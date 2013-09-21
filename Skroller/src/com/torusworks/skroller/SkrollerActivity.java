@@ -41,7 +41,7 @@ public class SkrollerActivity extends Activity{
 
 	SkrollContent content;
 	
-	private int PERCENT_BUFFER = 5;
+	private int PERCENT_BUFFER = 10;
 	enum PlayerState{
 		PREPARED,
 		COMPLETED,
@@ -202,7 +202,7 @@ public class SkrollerActivity extends Activity{
 
 		super.onStop();
 		if(mp != null && mp.isPlaying()) {
-			mp.stop();
+			mp.pause();
 		}
 
 	}
@@ -241,7 +241,7 @@ public class SkrollerActivity extends Activity{
 
 		// toggleMusicPlayPause();
 		if(mp != null && !mp.isPlaying()) {
-			startStream();
+			mp.prepareAsync();
 		}
 		Log.d(TAG, "View added");
 	}

@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
 	private static final String STREAM_HISTORY = "streamHistory";
 	private static final String MESSAGE = "message";
 	private static final String MESSAGE_HISTORY = "messageHistory";
+	private static final String SHOUTCAST_SAVED = "shoutcastSaved";
 	private int colorRed = 57;
 	private int colorGreen = 255;
 	private int colorBlue = 20;
@@ -69,6 +70,10 @@ public class MainActivity extends Activity {
 		});
 		
 		et.setText(PreferencePersister.getString(this, MESSAGE_SAVED, null));
+		
+		AutoCompleteTextView etStreamURL = (AutoCompleteTextView)findViewById(R.id.editShoutcast);
+		etStreamURL.setText(PreferencePersister.getString(this, SHOUTCAST_SAVED, null));
+
 		
 		
 		// init color picker
@@ -142,15 +147,16 @@ public class MainActivity extends Activity {
 	
 	private void setupHistory(int autoCompleteTextViewId, String key, String subKey) {
 		String[] ary = PreferencePersister.getArray(this, key, subKey);
+        AutoCompleteTextView atv = (AutoCompleteTextView) findViewById(autoCompleteTextViewId);
+        Resources res = getResources(); 
+        int color = res.getColor(android.R.color.black);
+        atv.setTextColor(color);
 		if (ary != null && ary.length > 0) {
 	        ArrayAdapter<String> historyAdapter = new ArrayAdapter<String>(this,
 	                android.R.layout.select_dialog_item, ary);
-	        AutoCompleteTextView atv = (AutoCompleteTextView) findViewById(autoCompleteTextViewId);
 	        atv.setThreshold(1);
 	        atv.setAdapter(historyAdapter);
-	        Resources res = getResources(); 
-	        int color = res.getColor(android.R.color.black);
-	        atv.setTextColor(color);
+
 		}		
 	}
 	
@@ -209,6 +215,7 @@ public class MainActivity extends Activity {
 		PreferencePersister.putInt(this, COLOR_GREEN, colorGreen);
 		PreferencePersister.putInt(this, COLOR_BLUE, colorBlue);
 		PreferencePersister.putString(this, MESSAGE_SAVED, content.getMessage());
+		PreferencePersister.putString(this, SHOUTCAST_SAVED, content.getStreamURL());
 		
 		startActivity(i);
 	}
