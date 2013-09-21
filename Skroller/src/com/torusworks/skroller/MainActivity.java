@@ -28,10 +28,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
+	private static final String MESSAGE_SAVED = "messageSaved";
 	private static final String PLAY_SHOUTCAST = "play_shoutcast";
 	private static final String COLOR_BLUE = "COLOR_BLUE";
 	private static final String COLOR_GREEN = "COLOR_GREEN";
@@ -47,14 +49,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);		
 		
-		
-		colorRed = PreferencePersister.getInt(this, COLOR_RED, colorRed);
-		colorGreen = PreferencePersister.getInt(this, COLOR_GREEN, colorGreen);
-		colorBlue = PreferencePersister.getInt(this, COLOR_BLUE, colorBlue);		
-
-		((EditText)findViewById(R.id.editMessage)).setOnEditorActionListener(
+		// init message AutoCompleteTextView
+		AutoCompleteTextView et = (AutoCompleteTextView)findViewById(R.id.editMessage);
+		et.setOnEditorActionListener(
 		        new EditText.OnEditorActionListener() {
 		    @Override
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -67,92 +66,60 @@ public class MainActivity extends Activity {
 		        }
 		        return false;
 		    }
-		});		
+		});
 		
+		et.setText(PreferencePersister.getString(this, MESSAGE_SAVED, null));
+		
+		
+		// init color picker
+		colorRed = PreferencePersister.getInt(this, COLOR_RED, colorRed);
+		colorGreen = PreferencePersister.getInt(this, COLOR_GREEN, colorGreen);
+		colorBlue = PreferencePersister.getInt(this, COLOR_BLUE, colorBlue);		
+
+		OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				switch (seekBar.getId()) {
+				case R.id.seekBarRed:
+					colorRed = seekBar.getProgress();
+					break;
+				case R.id.seekBarGreen:
+					colorGreen = seekBar.getProgress();
+					break;
+				case R.id.seekBarBlue:
+					colorBlue = seekBar.getProgress();
+					break;
+				}
+				updateColor();
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+			}
+		};
 		
 		final SeekBar skR = (SeekBar) findViewById(R.id.seekBarRed);
 		skR.setProgress(colorRed);
-		skR.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-				final SeekBar sk = (SeekBar) findViewById(R.id.seekBarRed);
-				colorRed = sk.getProgress();
-				updateColor();
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
+		skR.setOnSeekBarChangeListener(seekBarChangeListener);
 
 		final SeekBar skG = (SeekBar) findViewById(R.id.seekBarGreen);
 		skG.setProgress(colorGreen);
-		skG.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-				final SeekBar sk = (SeekBar) findViewById(R.id.seekBarGreen);
-				colorGreen = sk.getProgress();
-				updateColor();
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
+		skG.setOnSeekBarChangeListener(seekBarChangeListener);
 
 		final SeekBar skB = (SeekBar) findViewById(R.id.seekBarBlue);
 		skB.setProgress(colorBlue);
-		skB.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+		skB.setOnSeekBarChangeListener(seekBarChangeListener);
 
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-				final SeekBar sk = (SeekBar) findViewById(R.id.seekBarBlue);
-				colorBlue = sk.getProgress();
-				updateColor();
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
 		updateColor();
 		
-		
+		// init streaming audio controls
 		final CheckBox checkBoxEnableShoutCast = (CheckBox) findViewById(R.id.checkBoxEnableShoutCast);
 		checkBoxEnableShoutCast.setChecked(PreferencePersister.getBoolean(this, PLAY_SHOUTCAST, true));
 		
@@ -167,6 +134,7 @@ public class MainActivity extends Activity {
 			}
 		});	
 		
+		// load edittext's history
 		setupHistory(R.id.editMessage, MESSAGE_HISTORY, MESSAGE);
 		setupHistory(R.id.editShoutcast, STREAM_HISTORY, STREAM_URL);
 		
@@ -240,7 +208,7 @@ public class MainActivity extends Activity {
 		PreferencePersister.putInt(this, COLOR_RED, colorRed);
 		PreferencePersister.putInt(this, COLOR_GREEN, colorGreen);
 		PreferencePersister.putInt(this, COLOR_BLUE, colorBlue);
-		
+		PreferencePersister.putString(this, MESSAGE_SAVED, content.getMessage());
 		
 		startActivity(i);
 	}

@@ -241,7 +241,7 @@ public class SkrollerActivity extends Activity{
 
 		// toggleMusicPlayPause();
 		if(mp != null && !mp.isPlaying()) {
-			mp.start();
+			startStream();
 		}
 		Log.d(TAG, "View added");
 	}

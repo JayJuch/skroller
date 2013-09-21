@@ -36,6 +36,27 @@ public class PreferencePersister {
 		}
 		return ret;
 	}
+	
+	public static String getString(Context context, String key, String defValue) {
+		SharedPreferences app_preferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		return app_preferences.getString(key, defValue);		
+	}
+
+	public static boolean putString(Context context, String key, String value) {
+		boolean ret = false;
+		try {
+			SharedPreferences app_preferences = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			SharedPreferences.Editor editor = app_preferences.edit();
+			editor.putString(key, value);
+			editor.commit();
+			ret = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}	
 
 	public static boolean getBoolean(Context context, String key, boolean defValue) {
 		SharedPreferences app_preferences = PreferenceManager
