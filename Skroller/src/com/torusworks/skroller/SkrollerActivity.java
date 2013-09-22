@@ -63,7 +63,7 @@ public class SkrollerActivity extends Activity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-				
+
 		// requesting to turn the title OFF
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// making it full screen
@@ -202,7 +202,7 @@ public class SkrollerActivity extends Activity{
 
 		super.onStop();
 		if(mp != null && mp.isPlaying()) {
-			mp.pause();
+			mp.stop();
 		}
 
 	}
@@ -241,7 +241,7 @@ public class SkrollerActivity extends Activity{
 
 		// toggleMusicPlayPause();
 		if(mp != null && !mp.isPlaying()) {
-			mp.prepareAsync();
+			startStream();
 		}
 		Log.d(TAG, "View added");
 	}

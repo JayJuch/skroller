@@ -3,6 +3,7 @@
  */
 package com.torusworks.android.ui;
 
+import com.torusworks.skroller.Skroller;
 import com.torusworks.skroller.model.*;
 
 import android.app.Activity;

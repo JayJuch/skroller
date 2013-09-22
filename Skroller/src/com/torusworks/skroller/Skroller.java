@@ -1,4 +1,4 @@
-package com.torusworks.skroller.model;
+package com.torusworks.skroller;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -30,6 +30,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.torusworks.android.shoutcast.OnFetchComplete;
 import com.torusworks.android.shoutcast.StreamMetaDataReader;
 import com.torusworks.android.ui.MainGamePanel;
+import com.torusworks.skroller.model.SkrollContent;
+import com.torusworks.skroller.model.TorusVisualizer;
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
@@ -72,7 +74,7 @@ public class Skroller implements OnFetchComplete {
 
 		this.view = view;
 		
-		displayMessage = content.getMessage();
+		updateDisplayMesage();
 		
 		if(content.getStreamURL() != null) {
 			streamMetaDataReader = new StreamMetaDataReader(content.getStreamURL());			
@@ -147,15 +149,22 @@ public class Skroller implements OnFetchComplete {
 
 		if (idx > bounds.width()) {
 			idx = -1 * canvas.getWidth();
-			
-			// update the message using any updated stream info
-			this.displayMessage = content.getMessage() + "  [" + content.popMessage() + "] ";
-			
+			updateDisplayMesage();			
 			// go fetch again
-			this.backgroundPollStreamInfo();
+			if(content.getStreamURL() != null) {
+				this.backgroundPollStreamInfo();
+			}
 		}
 	}
 
+	private void updateDisplayMesage() {
+		String metaDataUpdate = content.popMessage();
+		this.displayMessage = content.getMessage();
+		if (metaDataUpdate != null && metaDataUpdate.length() > 0) {
+			this.displayMessage +="  [" + metaDataUpdate + "] ";
+		}
+	}
+	
 	public void backgroundPollStreamInfo() {
 		Thread th = new Thread(this.streamMetaDataReader);
 		th.start();

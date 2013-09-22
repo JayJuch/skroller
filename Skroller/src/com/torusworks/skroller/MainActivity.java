@@ -46,6 +46,8 @@ public class MainActivity extends Activity {
 	private int colorRed = 57;
 	private int colorGreen = 255;
 	private int colorBlue = 20;
+	
+	private static final String DEFAULT_STREAM_URL = "http://radio1-se.digitalgunfire.com:80";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,7 @@ public class MainActivity extends Activity {
 		et.setText(PreferencePersister.getString(this, MESSAGE_SAVED, null));
 		
 		AutoCompleteTextView etStreamURL = (AutoCompleteTextView)findViewById(R.id.editShoutcast);
-		etStreamURL.setText(PreferencePersister.getString(this, SHOUTCAST_SAVED, null));
+		etStreamURL.setText(PreferencePersister.getString(this, SHOUTCAST_SAVED, DEFAULT_STREAM_URL));
 
 		
 		
