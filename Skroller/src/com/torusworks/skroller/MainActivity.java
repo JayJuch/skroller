@@ -46,42 +46,41 @@ public class MainActivity extends Activity {
 	private int colorRed = 57;
 	private int colorGreen = 255;
 	private int colorBlue = 20;
-	
+
 	private static final String DEFAULT_STREAM_URL = "http://radio1-se.digitalgunfire.com:80";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);		
-		
-		// init message AutoCompleteTextView
-		AutoCompleteTextView et = (AutoCompleteTextView)findViewById(R.id.editMessage);
-		et.setOnEditorActionListener(
-		        new EditText.OnEditorActionListener() {
-		    @Override
-		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		        if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-		                actionId == EditorInfo.IME_ACTION_DONE ||
-		                event.getAction() == KeyEvent.ACTION_DOWN &&
-		                event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-		        	launchSkrollerActivity();
-		            return true;
-		        }
-		        return false;
-		    }
-		});
-		
-		et.setText(PreferencePersister.getString(this, MESSAGE_SAVED, null));
-		
-		AutoCompleteTextView etStreamURL = (AutoCompleteTextView)findViewById(R.id.editShoutcast);
-		etStreamURL.setText(PreferencePersister.getString(this, SHOUTCAST_SAVED, DEFAULT_STREAM_URL));
+		setContentView(R.layout.activity_main);
 
-		
-		
+		// init message AutoCompleteTextView
+		AutoCompleteTextView et = (AutoCompleteTextView) findViewById(R.id.editMessage);
+		et.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH
+						|| actionId == EditorInfo.IME_ACTION_DONE
+						|| event.getAction() == KeyEvent.ACTION_DOWN
+						&& event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+					launchSkrollerActivity();
+					return true;
+				}
+				return false;
+			}
+		});
+
+		et.setText(PreferencePersister.getString(this, MESSAGE_SAVED, null));
+
+		AutoCompleteTextView etStreamURL = (AutoCompleteTextView) findViewById(R.id.editShoutcast);
+		etStreamURL.setText(PreferencePersister.getString(this,
+				SHOUTCAST_SAVED, DEFAULT_STREAM_URL));
+
 		// init color picker
 		colorRed = PreferencePersister.getInt(this, COLOR_RED, colorRed);
 		colorGreen = PreferencePersister.getInt(this, COLOR_GREEN, colorGreen);
-		colorBlue = PreferencePersister.getInt(this, COLOR_BLUE, colorBlue);		
+		colorBlue = PreferencePersister.getInt(this, COLOR_BLUE, colorBlue);
 
 		OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
 			@Override
@@ -111,7 +110,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 			}
 		};
-		
+
 		final SeekBar skR = (SeekBar) findViewById(R.id.seekBarRed);
 		skR.setProgress(colorRed);
 		skR.setOnSeekBarChangeListener(seekBarChangeListener);
@@ -125,43 +124,45 @@ public class MainActivity extends Activity {
 		skB.setOnSeekBarChangeListener(seekBarChangeListener);
 
 		updateColor();
-		
+
 		// init streaming audio controls
 		final CheckBox checkBoxEnableShoutCast = (CheckBox) findViewById(R.id.checkBoxEnableShoutCast);
-		checkBoxEnableShoutCast.setChecked(PreferencePersister.getBoolean(this, PLAY_SHOUTCAST, true));
-		
+		checkBoxEnableShoutCast.setChecked(PreferencePersister.getBoolean(this,
+				PLAY_SHOUTCAST, true));
+
 		checkBoxEnableShoutCast.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				final EditText etsc = (EditText) findViewById(R.id.editShoutcast);
-				if (((CheckBox)v).isChecked()) {
+				if (((CheckBox) v).isChecked()) {
 					etsc.setEnabled(true);
 				} else {
 					etsc.setEnabled(false);
 				}
 			}
-		});	
-		
+		});
+
 		// load edittext's history
 		setupHistory(R.id.editMessage, MESSAGE_HISTORY, MESSAGE);
 		setupHistory(R.id.editShoutcast, STREAM_HISTORY, STREAM_URL);
-		
-	}
-	
-	private void setupHistory(int autoCompleteTextViewId, String key, String subKey) {
-		String[] ary = PreferencePersister.getArray(this, key, subKey);
-        AutoCompleteTextView atv = (AutoCompleteTextView) findViewById(autoCompleteTextViewId);
-        Resources res = getResources(); 
-        int color = res.getColor(android.R.color.black);
-        atv.setTextColor(color);
-		if (ary != null && ary.length > 0) {
-	        ArrayAdapter<String> historyAdapter = new ArrayAdapter<String>(this,
-	                android.R.layout.select_dialog_item, ary);
-	        atv.setThreshold(1);
-	        atv.setAdapter(historyAdapter);
 
-		}		
 	}
-	
+
+	private void setupHistory(int autoCompleteTextViewId, String key,
+			String subKey) {
+		String[] ary = PreferencePersister.getArray(this, key, subKey);
+		AutoCompleteTextView atv = (AutoCompleteTextView) findViewById(autoCompleteTextViewId);
+		Resources res = getResources();
+		int color = res.getColor(android.R.color.black);
+		atv.setTextColor(color);
+		if (ary != null && ary.length > 0) {
+			ArrayAdapter<String> historyAdapter = new ArrayAdapter<String>(
+					this, android.R.layout.select_dialog_item, ary);
+			atv.setThreshold(1);
+			atv.setAdapter(historyAdapter);
+
+		}
+	}
+
 	private void updateColor() {
 		// TODO Auto-generated method stub
 		final TextView textViewColor = (TextView) findViewById(R.id.textViewShowColor);
@@ -196,29 +197,32 @@ public class MainActivity extends Activity {
 		}
 		SkrollContent content = new SkrollContent(message);
 
-		content.setBackTextColor(colorRed << 16 | colorGreen << 8
-				| colorBlue);
-		
+		content.setBackTextColor(colorRed << 16 | colorGreen << 8 | colorBlue);
+
 		CheckBox cb = (CheckBox) findViewById(R.id.checkBoxEnableShoutCast);
 		EditText ebStreamUrl = (EditText) findViewById(R.id.editShoutcast);
-		
+
 		if (cb.isChecked()) {
 			content.setStreamURL(ebStreamUrl.getText().toString());
 		} else {
-			content.setStreamURL(null);			
+			content.setStreamURL(null);
 		}
 		i.putExtra("SkrollContent", content);
 
 		// save the message to history
-		PreferencePersister.putInArray(this, MESSAGE_HISTORY, MESSAGE, content.getMessage());
-		PreferencePersister.putInArray(this, STREAM_HISTORY, STREAM_URL, content.getStreamURL());
+		PreferencePersister.putInArray(this, MESSAGE_HISTORY, MESSAGE,
+				content.getMessage());
+		PreferencePersister.putInArray(this, STREAM_HISTORY, STREAM_URL,
+				content.getStreamURL());
 		PreferencePersister.putBoolean(this, PLAY_SHOUTCAST, cb.isChecked());
 		PreferencePersister.putInt(this, COLOR_RED, colorRed);
 		PreferencePersister.putInt(this, COLOR_GREEN, colorGreen);
 		PreferencePersister.putInt(this, COLOR_BLUE, colorBlue);
-		PreferencePersister.putString(this, MESSAGE_SAVED, content.getMessage());
-		PreferencePersister.putString(this, SHOUTCAST_SAVED, content.getStreamURL());
-		
+		PreferencePersister
+				.putString(this, MESSAGE_SAVED, content.getMessage());
+		PreferencePersister.putString(this, SHOUTCAST_SAVED,
+				content.getStreamURL());
+
 		startActivity(i);
 	}
 

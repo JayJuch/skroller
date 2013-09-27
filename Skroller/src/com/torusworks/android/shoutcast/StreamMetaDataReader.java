@@ -13,20 +13,20 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class StreamMetaDataReader implements Runnable{
-	
+public class StreamMetaDataReader implements Runnable {
+
 	private static final int STREAM_INFO_ARTIST_SONG = 6;
 	private StringBuilder rawHtmlResponse;
 	private String responseBody;
 	private String[] streamInfo;
 	private OnFetchComplete onFetchComplete;
-	
+
 	private String streamUrl;
 
 	public StreamMetaDataReader(String url) {
 		this.streamUrl = url;
 	}
-	
+
 	public String getStreamUrl() {
 		return streamUrl;
 	}
@@ -44,19 +44,19 @@ public class StreamMetaDataReader implements Runnable{
 			response = client.execute(request);
 			String html = "";
 			InputStream in = response.getEntity().getContent();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(in));
 			rawHtmlResponse = new StringBuilder();
 			String line = null;
-			while((line = reader.readLine()) != null)
-			{
+			while ((line = reader.readLine()) != null) {
 				rawHtmlResponse.append(line);
 			}
 			in.close();
-			html = rawHtmlResponse.toString();		
-			
+			html = rawHtmlResponse.toString();
+
 			Pattern p = Pattern.compile("<body>(.*?)</body>");
 			Matcher m = p.matcher(html);
-			if(m.find()) {
+			if (m.find()) {
 				responseBody = m.group(1);
 				streamInfo = m.group(1).split(",");
 			}
@@ -64,7 +64,7 @@ public class StreamMetaDataReader implements Runnable{
 			if (this.onFetchComplete != null) {
 				this.onFetchComplete.handleFetchComplete(this);
 			}
-			
+
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,11 +74,11 @@ public class StreamMetaDataReader implements Runnable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return responseBody;
 
 	}
-	
+
 	public String getArtistAndSong() {
 		String ret = null;
 		if (streamInfo.length > STREAM_INFO_ARTIST_SONG) {
@@ -86,9 +86,9 @@ public class StreamMetaDataReader implements Runnable{
 		}
 		return ret;
 	}
-	
+
 	public void setOnFetchComplete(OnFetchComplete onFetchComplete) {
-		this.onFetchComplete  = onFetchComplete;
+		this.onFetchComplete = onFetchComplete;
 	}
 
 	@Override
@@ -96,6 +96,5 @@ public class StreamMetaDataReader implements Runnable{
 		// TODO Auto-generated method stub
 		fetchSevenHtml();
 	}
-	
-	
+
 }

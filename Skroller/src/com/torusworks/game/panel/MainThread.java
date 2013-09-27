@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.torusworks.android.ui;
+package com.torusworks.game.panel;
 
 import java.text.DecimalFormat;
 

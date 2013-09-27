@@ -29,7 +29,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.torusworks.android.shoutcast.OnFetchComplete;
 import com.torusworks.android.shoutcast.StreamMetaDataReader;
-import com.torusworks.android.ui.MainGamePanel;
+import com.torusworks.game.panel.SurfaceViewGamePanel;
 import com.torusworks.skroller.model.SkrollContent;
 import com.torusworks.skroller.model.TorusVisualizer;
 
@@ -48,7 +48,7 @@ import android.view.SurfaceView;
 public class Skroller implements OnFetchComplete {
 
 	private static final String TAG = Skroller.class.getSimpleName();
-	
+
 	private boolean touched;
 	private SkrollContent content;
 
@@ -64,26 +64,28 @@ public class Skroller implements OnFetchComplete {
 	private int touchX;
 
 	private StreamMetaDataReader streamMetaDataReader;
-	
-	private String displayMessage ="";
-	
-	public Skroller(SkrollContent content, SurfaceView view, TorusVisualizer visualizer) {
+
+	private String displayMessage = "";
+
+	public Skroller(SkrollContent content, SurfaceView view,
+			TorusVisualizer visualizer) {
 		this.content = content;
-		
+
 		this.mVisualizer = visualizer;
 
 		this.view = view;
-		
+
 		updateDisplayMesage();
-		
-		if(content.getStreamURL() != null) {
-			streamMetaDataReader = new StreamMetaDataReader(content.getStreamURL());			
+
+		if (content.getStreamURL() != null) {
+			streamMetaDataReader = new StreamMetaDataReader(
+					content.getStreamURL());
 			streamMetaDataReader.setOnFetchComplete(this);
 
 			// start the stream meta data fetching in the background
 			this.backgroundPollStreamInfo();
 		}
-		
+
 	}
 
 	public boolean isTouched() {
@@ -98,19 +100,16 @@ public class Skroller implements OnFetchComplete {
 		this.touched = touched;
 	}
 
-
-
-
 	public void draw(Canvas canvas) {
 		double rms = mVisualizer.getRms();
-		//Log.d(TAG,Double.toString(rms));
-		double percentRms = rms/128;
-		
+		// Log.d(TAG,Double.toString(rms));
+		double percentRms = rms / 128;
+
 		if (clean_start) {
 			idx -= canvas.getWidth();
 			clean_start = false;
 		}
-		
+
 		canvas.drawColor(Color.BLACK);
 
 		Paint paint = new Paint();
@@ -127,18 +126,16 @@ public class Skroller implements OnFetchComplete {
 			idx = idx + (int) (height * content.getVelocity());
 		}
 
-		
-		
-		int maxVerts = (int)(20f * percentRms);
+		int maxVerts = (int) (20f * percentRms);
 		for (int i = 0; i < maxVerts; i++) {
 			int xOff = 0;
 			int yOff = 0;
 
 			double t = 2 * Math.PI * ((double) i / maxVerts);
-			xOff = (int) (percentRms * Math.cos(t) * content
-					.getBackTextRadiusMultiplier() * height);
-			yOff = (int) (percentRms * Math.sin(t) * content
-					.getBackTextRadiusMultiplier() * height);
+			xOff = (int) (percentRms * Math.cos(t)
+					* content.getBackTextRadiusMultiplier() * height);
+			yOff = (int) (percentRms * Math.sin(t)
+					* content.getBackTextRadiusMultiplier() * height);
 			canvas.drawText(text, -1 * idx + xOff, yOff + -1 * bounds.top,
 					paint);
 		}
@@ -149,9 +146,9 @@ public class Skroller implements OnFetchComplete {
 
 		if (idx > bounds.width()) {
 			idx = -1 * canvas.getWidth();
-			updateDisplayMesage();			
+			updateDisplayMesage();
 			// go fetch again
-			if(content.getStreamURL() != null) {
+			if (content.getStreamURL() != null) {
 				this.backgroundPollStreamInfo();
 			}
 		}
@@ -161,16 +158,15 @@ public class Skroller implements OnFetchComplete {
 		String metaDataUpdate = content.popMessage();
 		this.displayMessage = content.getMessage();
 		if (metaDataUpdate != null && metaDataUpdate.length() > 0) {
-			this.displayMessage +="  [" + metaDataUpdate + "] ";
+			this.displayMessage += "  [" + metaDataUpdate + "] ";
 		}
 	}
-	
+
 	public void backgroundPollStreamInfo() {
 		Thread th = new Thread(this.streamMetaDataReader);
 		th.start();
 	}
 
-	
 	/**
 	 * Method which updates the droid's internal state every tick
 	 */

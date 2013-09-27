@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.torusworks.android.ui;
+package com.torusworks.game.panel;
 
 import com.torusworks.skroller.Skroller;
 import com.torusworks.skroller.model.*;
@@ -22,10 +22,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class MainGamePanel extends SurfaceView implements
-		SurfaceHolder.Callback, GamePanel, OnGestureListener{
+public class SurfaceViewGamePanel extends SurfaceView implements
+		SurfaceHolder.Callback, GamePanel, OnGestureListener {
 
-	private static final String TAG = MainGamePanel.class.getSimpleName();
+	private static final String TAG = SurfaceViewGamePanel.class.getSimpleName();
 
 	private MainThread thread;
 
@@ -35,12 +35,13 @@ public class MainGamePanel extends SurfaceView implements
 	private String avgFps;
 
 	private GestureDetector gd;
-	
+
 	public void setAvgFps(String avgFps) {
 		this.avgFps = avgFps;
 	}
 
-	public MainGamePanel(Context context, SkrollContent content, TorusVisualizer visualizer) {
+	public SurfaceViewGamePanel(Context context, SkrollContent content,
+			TorusVisualizer visualizer) {
 		super(context);
 
 		// adding the callback (this) to the surface holder to intercept events
@@ -57,8 +58,8 @@ public class MainGamePanel extends SurfaceView implements
 
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
-		
-		//gd = new GestureDetector(context,this);		
+
+		// gd = new GestureDetector(context,this);
 	}
 
 	@Override
@@ -187,7 +188,7 @@ public class MainGamePanel extends SurfaceView implements
 	@Override
 	public void onLongPress(MotionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -200,7 +201,7 @@ public class MainGamePanel extends SurfaceView implements
 	@Override
 	public void onShowPress(MotionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
