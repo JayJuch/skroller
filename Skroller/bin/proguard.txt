@@ -1,0 +1,12 @@
+# view AndroidManifest.xml #generated:21
+-keep class com.torusworks.skroller.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:30
+-keep class com.torusworks.skroller.SkrollerActivity { <init>(...); }
+
+# onClick res/layout/activity_main.xml #generated:109
+-keepclassmembers class * { *** onClick(...); }
+
+# onClick res/layout/activity_main.xml #generated:91
+-keepclassmembers class * { *** onEnableShoutCastClick(...); }
+

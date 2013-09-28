@@ -30,6 +30,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.torusworks.android.shoutcast.OnFetchComplete;
 import com.torusworks.android.shoutcast.StreamMetaDataReader;
 import com.torusworks.game.panel.SurfaceViewGamePanel;
+import com.torusworks.scriptengine.JavaScriptEngine;
 import com.torusworks.skroller.model.SkrollContent;
 import com.torusworks.skroller.model.TorusVisualizer;
 
@@ -67,6 +68,8 @@ public class Skroller implements OnFetchComplete {
 
 	private String displayMessage = "";
 
+	private JavaScriptEngine jse = new JavaScriptEngine();
+	
 	public Skroller(SkrollContent content, SurfaceView view,
 			TorusVisualizer visualizer) {
 		this.content = content;
@@ -160,6 +163,18 @@ public class Skroller implements OnFetchComplete {
 		if (metaDataUpdate != null && metaDataUpdate.length() > 0) {
 			this.displayMessage += "  [" + metaDataUpdate + "] ";
 		}
+		
+		// pull out the scripts
+		Pattern p = Pattern.compile("\\@\\@(.*?)\\@\\@");
+		Matcher m = p.matcher(content.getMessage());
+		while (true == m.find()) {
+			String fullMatch = m.group(0); // get the script and the escaper string
+			String js = m.group(1); // get the script and the escaper string
+			String jsRet = jse.execute(js); // execute the script
+			this.displayMessage = this.displayMessage.replace(fullMatch, jsRet);
+		}
+
+		
 	}
 
 	public void backgroundPollStreamInfo() {
