@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
 		}
 		SkrollContent content = new SkrollContent(message);
 
-		content.setBackTextColor(colorRed << 16 | colorGreen << 8 | colorBlue);
+		content.setFrontTextColor(colorRed << 16 | colorGreen << 8 | colorBlue);
 
 		CheckBox cb = (CheckBox) findViewById(R.id.checkBoxEnableShoutCast);
 		EditText ebStreamUrl = (EditText) findViewById(R.id.editShoutcast);

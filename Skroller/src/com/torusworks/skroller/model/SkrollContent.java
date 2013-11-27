@@ -8,12 +8,12 @@ import android.graphics.Color;
 
 public class SkrollContent implements Serializable {
 
-	private double velocity = .038f;
+	private double velocity = .034f;
 	private String message = "";
 	private int frontTextColor = Color.WHITE;
-	private int backTextColor = 0x39FF14;
-	private int frontTextAlpha = 150;
-	private int backTextAlpha = 200;
+	private int backTextColor = Color.WHITE;
+	private int frontTextAlpha = 200;
+	private int backTextAlpha = 255;
 	private double backTextRadiusMultiplier = 0.15f;
 	private String streamURL = null;
 	private Queue<String> messageQueue = new ConcurrentLinkedQueue<String>();

@@ -1360,20 +1360,26 @@ com.torusworks.skroller.Skroller -> com.torusworks.skroller.d:
     com.torusworks.skroller.model.SkrollContent content -> c
     boolean clean_start -> d
     int idx -> e
-    com.torusworks.skroller.model.TorusVisualizer mVisualizer -> f
-    android.view.SurfaceView view -> g
-    int touchIdx -> h
-    int touchX -> i
-    com.torusworks.android.shoutcast.StreamMetaDataReader streamMetaDataReader -> j
-    java.lang.String displayMessage -> k
-    com.torusworks.scriptengine.JavaScriptEngine jse -> l
+    int pathOffsetX -> f
+    com.torusworks.skroller.model.TorusVisualizer mVisualizer -> g
+    android.view.SurfaceView view -> h
+    int touchIdx -> i
+    int touchX -> j
+    com.torusworks.android.shoutcast.StreamMetaDataReader streamMetaDataReader -> k
+    java.lang.String displayMessage -> l
+    com.torusworks.scriptengine.JavaScriptEngine jse -> m
+    java.lang.String lastDisplayMessage -> n
+    android.graphics.Path pathBackText -> o
+    android.graphics.Path pathFrontText -> p
+    int lastHeight -> q
     boolean isTouched() -> a
     void setTouched(boolean,int) -> a
     void draw(android.graphics.Canvas) -> a
-    void updateDisplayMesage() -> d
+    void updateDisplayMesage() -> e
     void backgroundPollStreamInfo() -> b
+    void update() -> c
     void handleActionDown(int,int) -> a
-    void release() -> c
+    void release() -> d
     void move(int,int) -> b
     void handleFetchComplete(com.torusworks.android.shoutcast.StreamMetaDataReader) -> a
 com.torusworks.skroller.SkrollerActivity -> com.torusworks.skroller.SkrollerActivity:
@@ -1383,21 +1389,24 @@ com.torusworks.skroller.SkrollerActivity -> com.torusworks.skroller.SkrollerActi
     com.torusworks.skroller.model.SkrollContent content -> a
     int PERCENT_BUFFER -> e
     void onCreate(android.os.Bundle) -> onCreate
-    void startStream() -> a
+    void startStream() -> b
     void onDestroy() -> onDestroy
     void onStop() -> onStop
     void onStart() -> onStart
     void onRestart() -> onRestart
     void onResume() -> onResume
     void onPause() -> onPause
-    int access$0(com.torusworks.skroller.SkrollerActivity) -> a
+    java.lang.String access$0() -> a
 com.torusworks.skroller.SkrollerActivity$1 -> com.torusworks.skroller.e:
     com.torusworks.skroller.SkrollerActivity this$0 -> a
-    void onBufferingUpdate(android.media.MediaPlayer,int) -> onBufferingUpdate
+    boolean onError(android.media.MediaPlayer,int,int) -> onError
 com.torusworks.skroller.SkrollerActivity$2 -> com.torusworks.skroller.f:
     com.torusworks.skroller.SkrollerActivity this$0 -> a
-    void onClick(android.content.DialogInterface,int) -> onClick
+    void onCompletion(android.media.MediaPlayer) -> onCompletion
 com.torusworks.skroller.SkrollerActivity$3 -> com.torusworks.skroller.g:
+    com.torusworks.skroller.SkrollerActivity this$0 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.torusworks.skroller.SkrollerActivity$4 -> com.torusworks.skroller.h:
     com.torusworks.skroller.SkrollerActivity this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
 com.torusworks.skroller.model.SkrollContent -> com.torusworks.skroller.a.a:
@@ -1414,14 +1423,13 @@ com.torusworks.skroller.model.SkrollContent -> com.torusworks.skroller.a.a:
     java.lang.String popMessage() -> a
     java.lang.String getStreamURL() -> b
     void setStreamURL(java.lang.String) -> b
-    double getBackTextRadiusMultiplier() -> c
-    double getVelocity() -> d
-    int getFrontTextColor() -> e
-    int getBackTextColor() -> f
-    void setBackTextColor(int) -> a
-    int getFrontTextAlpha() -> g
-    int getBackTextAlpha() -> h
-    java.lang.String getMessage() -> i
+    double getVelocity() -> c
+    int getFrontTextColor() -> d
+    void setFrontTextColor(int) -> a
+    int getBackTextColor() -> e
+    int getFrontTextAlpha() -> f
+    int getBackTextAlpha() -> g
+    java.lang.String getMessage() -> h
 com.torusworks.skroller.model.TorusVisualizer -> com.torusworks.skroller.a.b:
     double getRms() -> a
     void release() -> b

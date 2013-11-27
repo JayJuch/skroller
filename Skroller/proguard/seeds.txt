@@ -90,8 +90,8 @@ com.torusworks.skroller.R$style: int AppBaseTheme
 com.torusworks.skroller.R$style: int AppTheme
 com.torusworks.skroller.SkrollerActivity
 com.torusworks.skroller.SkrollerActivity: SkrollerActivity()
-com.torusworks.skroller.SkrollerActivity$2: void onClick(android.content.DialogInterface,int)
 com.torusworks.skroller.SkrollerActivity$3: void onClick(android.content.DialogInterface,int)
+com.torusworks.skroller.SkrollerActivity$4: void onClick(android.content.DialogInterface,int)
 org.mozilla.javascript.Token$CommentType: org.mozilla.javascript.Token$CommentType[] values()
 org.mozilla.javascript.Token$CommentType: org.mozilla.javascript.Token$CommentType valueOf(java.lang.String)
 org.mozilla.javascript.TopLevel$Builtins: org.mozilla.javascript.TopLevel$Builtins[] values()

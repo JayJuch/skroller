@@ -15,7 +15,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ConfigurationInfo;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.media.TimedText;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +45,7 @@ public class SkrollerActivity extends Activity {
 
 	SkrollContent content;
 
-	private int PERCENT_BUFFER = 10;
+	private int PERCENT_BUFFER = 100;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,19 +74,32 @@ public class SkrollerActivity extends Activity {
 		try {
 			mp = MediaPlayer.create(getApplicationContext(),
 					Uri.parse(content.getStreamURL()));
+			
+			mp.setOnErrorListener(new OnErrorListener(){
 
-			// Media buffer listener
-			mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-				public void onBufferingUpdate(MediaPlayer mp, int percent) {
-
-					// If the music isn't already playing, and the buffer has
-					// been reached
-					if (!mp.isPlaying() && percent > PERCENT_BUFFER) {
-						mp.start();
-						return;
-					}
+				@Override
+				public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
+					// TODO Auto-generated method stub
+					Log.d(TAG, "media player: OnError arg1:" + arg1 + " arg2:" + arg2);
+					return false;
 				}
+		
 			});
+			
+			mp.setOnCompletionListener(new OnCompletionListener(){
+
+				@Override
+				public void onCompletion(MediaPlayer arg0) {
+					// TODO Auto-generated method stub
+					Log.d(TAG, "media player: OnCompletion event");
+					arg0.start();
+				}
+				
+			});
+			
+
+//			mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
 
 			mp.start();
 

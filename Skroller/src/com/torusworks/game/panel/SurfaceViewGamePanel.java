@@ -3,6 +3,7 @@
  */
 package com.torusworks.game.panel;
 
+import com.torusworks.skroller.BuildConfig;
 import com.torusworks.skroller.Skroller;
 import com.torusworks.skroller.model.*;
 
@@ -128,9 +129,10 @@ public class SurfaceViewGamePanel extends SurfaceView implements
 
 		skroller.draw(canvas);
 
-		// droid.draw(canvas);
 		// display fps
-		displayFps(canvas, avgFps);
+		if (!BuildConfig.DEBUG) { 
+			displayFps(canvas, avgFps);
+		}
 	}
 
 	/*
@@ -140,28 +142,7 @@ public class SurfaceViewGamePanel extends SurfaceView implements
 	 */
 	@Override
 	public void update() {
-		// // check collision with right wall if heading right
-		// if (droid.getSpeed().getxDirection() == Speed.DIRECTION_RIGHT
-		// && droid.getX() + droid.getBitmap().getWidth() / 2 >= getWidth()) {
-		// droid.getSpeed().toggleXDirection();
-		// }
-		// // check collision with left wall if heading left
-		// if (droid.getSpeed().getxDirection() == Speed.DIRECTION_LEFT
-		// && droid.getX() - droid.getBitmap().getWidth() / 2 <= 0) {
-		// droid.getSpeed().toggleXDirection();
-		// }
-		// // check collision with bottom wall if heading down
-		// if (droid.getSpeed().getyDirection() == Speed.DIRECTION_DOWN
-		// && droid.getY() + droid.getBitmap().getHeight() / 2 >= getHeight()) {
-		// droid.getSpeed().toggleYDirection();
-		// }
-		// // check collision with top wall if heading up
-		// if (droid.getSpeed().getyDirection() == Speed.DIRECTION_UP
-		// && droid.getY() - droid.getBitmap().getHeight() / 2 <= 0) {
-		// droid.getSpeed().toggleYDirection();
-		// }
-		// // Update the lone droid
-		// droid.update();
+		skroller.update();
 	}
 
 	private void displayFps(Canvas canvas, String fps) {

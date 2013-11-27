@@ -35,10 +35,15 @@ import com.torusworks.skroller.model.SkrollContent;
 import com.torusworks.skroller.model.TorusVisualizer;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.MediaMetadataRetriever;
 import android.media.audiofx.Visualizer;
 import android.os.Build;
@@ -55,6 +60,7 @@ public class Skroller implements OnFetchComplete {
 
 	private boolean clean_start = true;
 	private int idx = 0;
+	private int pathOffsetX = 0;
 
 	private TorusVisualizer mVisualizer;
 	private int[] formattedVizData;
@@ -69,6 +75,14 @@ public class Skroller implements OnFetchComplete {
 	private String displayMessage = "";
 
 	private JavaScriptEngine jse = new JavaScriptEngine();
+	
+	private String lastDisplayMessage = null;
+
+	private Path pathBackText;
+
+	private Path pathFrontText;
+
+	private int lastHeight;
 	
 	public Skroller(SkrollContent content, SurfaceView view,
 			TorusVisualizer visualizer) {
@@ -115,38 +129,70 @@ public class Skroller implements OnFetchComplete {
 
 		canvas.drawColor(Color.BLACK);
 
+		int localIdx = idx;
 		Paint paint = new Paint();
-
-		int height = view.getHeight();
+		
+		int height = (int)((float)view.getHeight() * 0.7);
 		paint.setColor(content.getBackTextColor());
 		paint.setAlpha(content.getBackTextAlpha());
 		paint.setTextSize(height);
+
+		boolean useCache = true;
+		if (!displayMessage.equals(lastDisplayMessage)) {
+			useCache = false;
+			lastDisplayMessage = displayMessage;
+			pathOffsetX = 0;
+		}
+		
+		if (view.getHeight() != lastHeight) {
+			useCache = false;
+			lastHeight = view.getHeight();
+			idx = 0; localIdx = 0;
+			pathOffsetX = 0;
+		}
+		
 		String text = displayMessage;
+		
 		Rect bounds = new Rect();
-		paint.getTextBounds(text, 0, text.length() - 1, bounds);
-
-		if (!touched) {
-			idx = idx + (int) (height * content.getVelocity());
+		paint.setStyle(Style.FILL);
+		paint.getTextBounds(text, 0, text.length(), bounds);
+		int heightOffset = (int)((float)view.getHeight() * 0.25);
+		
+		if (!useCache) {
+			pathBackText = new Path();
+			paint.getTextPath(text, 0, text.length(), 0, view.getHeight() - heightOffset, pathBackText);
+			//paint.getTextPath(text, 0, text.length(), -1 * idx, view.getHeight() - heightOffset, pathBackText);
 		}
+		
 
-		int maxVerts = (int) (20f * percentRms);
-		for (int i = 0; i < maxVerts; i++) {
-			int xOff = 0;
-			int yOff = 0;
+//		Matrix translate = new Matrix();
+//		translate.setTranslate(idx, 0);
+		
+//		Path transPathBack = null;
+//		pathBackText.
 
-			double t = 2 * Math.PI * ((double) i / maxVerts);
-			xOff = (int) (percentRms * Math.cos(t)
-					* content.getBackTextRadiusMultiplier() * height);
-			yOff = (int) (percentRms * Math.sin(t)
-					* content.getBackTextRadiusMultiplier() * height);
-			canvas.drawText(text, -1 * idx + xOff, yOff + -1 * bounds.top,
-					paint);
-		}
+		pathBackText.offset(pathOffsetX - localIdx, 0);
 
+		canvas.drawPath(pathBackText, paint);
+		
+		
+		
+		paint.setStyle(Style.STROKE);
+		paint.setStrokeWidth((float)(percentRms * ((float)view.getHeight() * 0.28)));
+		
+				
 		paint.setColor(content.getFrontTextColor());
 		paint.setAlpha(content.getFrontTextAlpha());
-		canvas.drawText(text, -1 * idx, -1 * bounds.top, paint);
+		if (!useCache) {
+			pathFrontText = new Path();
+			paint.getTextPath(text, 0, text.length(), 0, view.getHeight() - heightOffset, pathFrontText);
+			//paint.getTextPath(text, 0, text.length(), -1 * idx, view.getHeight() - heightOffset, pathFrontText);
+		}
 
+		pathFrontText.offset(pathOffsetX - localIdx, 0);
+		pathOffsetX =  idx;
+		canvas.drawPath(pathFrontText, paint);
+		
 		if (idx > bounds.width()) {
 			idx = -1 * canvas.getWidth();
 			updateDisplayMesage();
@@ -157,6 +203,7 @@ public class Skroller implements OnFetchComplete {
 		}
 	}
 
+	
 	private void updateDisplayMesage() {
 		String metaDataUpdate = content.popMessage();
 		this.displayMessage = content.getMessage();
@@ -174,22 +221,17 @@ public class Skroller implements OnFetchComplete {
 			this.displayMessage = this.displayMessage.replace(fullMatch, jsRet);
 		}
 
-		
 	}
-
+	
 	public void backgroundPollStreamInfo() {
 		Thread th = new Thread(this.streamMetaDataReader);
 		th.start();
 	}
 
-	/**
-	 * Method which updates the droid's internal state every tick
-	 */
 	public void update() {
-		// if (!touched) {
-		// x += (speed.getXv() * speed.getxDirection());
-		// y += (speed.getYv() * speed.getyDirection());
-		// }
+		if (!touched) {
+			idx = idx + (int) (view.getHeight() * content.getVelocity());
+		}
 	}
 
 	/**

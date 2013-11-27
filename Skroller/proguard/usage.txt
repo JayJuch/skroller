@@ -961,6 +961,7 @@ com.torusworks.android.shoutcast.StreamMetaDataReader:
     private static final int STREAM_INFO_ARTIST_SONG
     31:31:public java.lang.String getStreamUrl()
     35:36:public void setStreamUrl(java.lang.String)
+com.torusworks.android.system.ApplicationInfo
 com.torusworks.android.visualizers.MicrophoneVisualizer
 com.torusworks.game.panel.MainThread:
     private static final int MAX_FPS
@@ -995,13 +996,13 @@ com.torusworks.skroller.R$style
 com.torusworks.skroller.Skroller:
     private int[] formattedVizData
     private byte[] vizBuffer
-    193:193:public void update()
 com.torusworks.skroller.SkrollerActivity:
-    176:188:private void toggleMusicPlayPause()
+    193:205:private void toggleMusicPlayPause()
 com.torusworks.skroller.model.SkrollContent:
+    42:42:public double getBackTextRadiusMultiplier()
     46:47:public void setBackTextRadiusMultiplier(double)
     58:59:public void setVelocity(double)
-    66:67:public void setFrontTextColor(int)
+    74:75:public void setBackTextColor(int)
     82:83:public void setFrontTextAlpha(int)
     90:91:public void setBackTextAlpha(int)
     98:99:public void setMessage(java.lang.String)
