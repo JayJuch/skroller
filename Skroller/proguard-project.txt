@@ -23,3 +23,4 @@
 -dontwarn javax.swing.**
 -dontwarn java.awt.**
 -dontwarn org.mozilla.javascript.**
+-keep class org.mozilla.** { *; }
